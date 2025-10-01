@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Nexus Search</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        :root{--google-blue:#1a73e8;--google-text-gray:#4d5156;--google-border-gray:#dfe1e5;--google-light-gray:#f8f9fa;--google-dark-text:#202124}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;margin:0;padding:0;background-color:#fff;color:var(--google-dark-text);font-size:14px}a{color:#1a0dab;text-decoration:none}a:hover{text-decoration:underline}img{border:0}ul{list-style:none;padding:0;margin:0}.results-header{border-bottom:1px solid #ebebeb;padding-left:150px}.logo-and-search-bar{display:flex;align-items:center;gap:40px;padding:15px 20px 10px 0}.small-logo{color:#4285F4;font-size:1.5em;font-weight:500;text-decoration:none;}.small-logo span{color:#DB4437}.small-logo span:nth-child(odd){color:#F4B400}.small-logo span:nth-child(4n){color:#0F9D58}.results-header .search-form{margin-top:0;flex-grow:1;max-width:690px;position:relative}.results-header input[type="search"]{width:100%;padding:12px 45px;border-radius:24px;font-size:16px;outline:none;border:1px solid var(--google-border-gray);box-shadow:0 1px 6px rgba(32,33,36,.16);box-sizing:border-box}.results-nav ul{display:flex;gap:5px;padding-left:20px}.results-nav a{color:#5f6368;padding:12px;display:flex;align-items:center;gap:8px;font-size:13px;border-bottom:3px solid transparent}.results-nav a.active{color:var(--google-blue);border-bottom-color:var(--google-blue);font-weight:bold}.results-nav a svg{fill:#5f6368}.results-nav a.active svg{fill:var(--google-blue)}.results-main{padding:15px 20px 30px 170px}.stats{color:#70757a;font-size:13px;margin-bottom:20px}.search-result{margin-bottom:25px}.search-result cite{font-style:normal;color:var(--google-dark-text);font-size:14px}.search-result h3{margin:0;font-size:20px;font-weight:400}.search-result p{color:var(--google-text-gray);line-height:1.57;margin-top:5px}#ai-results-container{background-color:#f0f4f9;border:1px solid #e0e6ec;border-radius:12px;padding:20px;margin-bottom:30px;max-width:650px}#ai-results-container h2{margin-top:0;font-size:18px;display:flex;align-items:center;gap:8px}#ai-results-container .ai-content p,#ai-results-container .ai-content ul,#ai-results-container .ai-content h3{font-size:15px;line-height:1.6}#image-results-container,#video-results-container{column-count:4;column-gap:15px;max-width:90vw}.image-item{margin-bottom:15px;display:inline-block;width:100%;border-radius:8px;overflow:hidden;position:relative;cursor:pointer}.image-item img{width:100%;height:auto;display:block}.image-item:hover .photographer-info{opacity:1}.photographer-info{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.7),transparent);padding:20px 10px 10px;color:white;opacity:0;transition:opacity 0.3s;font-size:12px}#news-results-container{display:flex;flex-direction:column;gap:20px;max-width:650px}.news-article{border:1px solid var(--google-border-gray);padding:15px;border-radius:8px;display:flex;gap:15px}.news-article img{width:120px;height:120px;object-fit:cover;border-radius:8px;flex-shrink:0}.news-content h3{font-size:18px;margin:0 0 5px 0;font-weight:500}.news-meta{font-size:12px;color:#70757a;margin-bottom:8px}.news-description{font-size:14px;color:var(--google-text-gray)}.hidden{display:none!important}.loader{text-align:center;padding:40px;font-size:16px;color:#70757a}
+    </style>
+</head>
+<body>
+
+    <header class="results-header">
+        <div class="logo-and-search-bar">
+             <a href="index.html" title="Back to Homepage" class="small-logo">N<span>e</span>x<span>u</span>s</a>
+             <form action="results.html" method="get" class="search-form">
+                <div class="search-input-wrapper">
+                    <input type="search" name="q" id="search-input-results" aria-label="Search">
+                    <button type="submit" aria-label="Search" style="display:none;"></button>
+                </div>
+             </form>
+        </div>
+        <nav class="results-nav">
+            <ul id="tabs">
+                <li><a href="#" data-tab="all" class="active"><svg height="16px" width="16px" focusable="false" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"></path><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path></svg>All</a></li>
+                <li><a href="#" data-tab="images"><svg height="16px" width="16px" focusable="false" viewBox="0 0 24 24"><path d="M20 4v12H8V4h12m0-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8.5 9.67l1.69 2.26 2.48-3.1L19 15H9zM4 6H2v14c0 1.1.9 2 2 2h14v-2-H4V6z"></path></svg>Images</a></li>
+                <li><a href="#" data-tab="videos"><svg height="16px" width="16px" focusable="false" viewBox="0 0 24 24" ><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" ></path></svg>Videos</a></li>
+                <li><a href="#" data-tab="news"><svg height="16px" width="16px" focusable="false" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 12H9V5h10v9zm-2-3h-6V9h6v1zm-6-2h6V6h-6v1z"></path></svg>News</a></li>
+                <li><a href="#" data-tab="ai"><svg height="16px" width="16px" focusable="false" viewBox="0 0 24 24"><path d="M12 2.5C12.83 2.5 13.5 3.17 13.5 4S12.83 5.5 12 5.5 10.5 4.83 10.5 4 11.17 2.5 12 2.5zM19.5 12c-0.83 0-1.5-0.67-1.5-1.5s0.67-1.5 1.5-1.5 1.5 0.67 1.5 1.5S20.33 12 19.5 12zM4.5 12c-0.83 0-1.5-0.67-1.5-1.5S3.67 9 4.5 9s1.5 0.67 1.5 1.5S5.33 12 4.5 12zM12 18.5c-0.83 0-1.5-0.67-1.5-1.5s0.67-1.5 1.5-1.5 1.5 0.67 1.5 1.5S12.83 18.5 12 18.5z"></path></svg>AI Mode</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="results-main">
+        <p class="stats" id="stats-line"></p>
+        <div id="results-wrapper">
+            <div id="loader" class="loader hidden"></div>
+            <div id="web-results-container"></div>
+            <div id="image-results-container" class="hidden"></div>
+            <div id="video-results-container" class="hidden"></div>
+            <div id="news-results-container" class="hidden"></div>
+            <div id="ai-results-container" class="hidden">
+                 <h2><svg height="24px" width="24px" focusable="false" viewBox="0 0 24 24"><path d="M12 2.5C12.83 2.5 13.5 3.17 13.5 4S12.83 5.5 12 5.5 10.5 4.83 10.5 4 11.17 2.5 12 2.5zM19.5 12c-0.83 0-1.5-0.67-1.5-1.5s0.67-1.5 1.5-1.5 1.5 0.67 1.5 1.5S20.33 12 19.5 12zM4.5 12c-0.83 0-1.5-0.67-1.5-1.5S3.67 9 4.5 9s1.5 0.67 1.5 1.5S5.33 12 4.5 12zM12 18.5c-0.83 0-1.5-0.67-1.5-1.5s0.67-1.5 1.5-1.5 1.5 0.67 1.5 1.5S12.83 18.5 12 18.5z"></path></svg>AI Overview</h2>
+                <div class="ai-content"></div>
+            </div>
+        </div>
+    </main>
+    
+   <script>
+        // --- 1. CONFIGURATION: Paste your API keys here ---
+        const PEXELS_API_KEY = 'CoHL8eD2VCrnvv3bNQ84qEQBhAf3GDr3zPOfdqbq6Cghryfsndq9hPyG';
+        const GNEWS_API_KEY = 'b7c676dea390cbdd3466d66db8c50f62';
+        // Note: The OpenAI key is kept securely on the server and is not needed here.
+        
+        // --- 2. DOM ELEMENTS ---
+        const searchInput = document.getElementById('search-input-results');
+        const pageTitle = document.getElementById('pageTitle');
+        const statsLine = document.getElementById('stats-line');
+        const tabs = document.getElementById('tabs');
+        const loader = document.getElementById('loader');
+        const resultContainers = { all: document.getElementById('web-results-container'), images: document.getElementById('image-results-container'), videos: document.getElementById('video-results-container'), news: document.getElementById('news-results-container'), ai: document.getElementById('ai-results-container') };
+
+        // --- 3. INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+            const tab = urlParams.get('t') || 'all';
+            if (!query) { statsLine.textContent = 'Please start a search from the homepage.'; return; }
+            const decodedQuery = decodeURIComponent(query);
+            searchInput.value = decodedQuery;
+            pageTitle.textContent = `${decodedQuery} - Nexus Search`;
+            updateActiveTab(tab);
+            fetchAndDisplay(decodedQuery, tab);
+            tabs.addEventListener('click', (e) => {
+                e.preventDefault();
+                const link = e.target.closest('a');
+                if (link && !link.classList.contains('active')) {
+                    const newTab = link.dataset.tab;
+                    const newUrl = `${window.location.pathname}?q=${encodeURIComponent(decodedQuery)}&t=${newTab}`;
+                    history.pushState({ path: newUrl }, '', newUrl);
+                    updateActiveTab(newTab);
+                    fetchAndDisplay(decodedQuery, newTab);
+                }
+            });
+        });
+
+        // --- 4. MAIN CONTROLLER ---
+        async function fetchAndDisplay(query, tab) {
+            hideAllContainers();
+            loader.innerHTML = `Loading...`;
+            loader.classList.remove('hidden');
+            statsLine.textContent = `Searching for "${query}" in ${tab}...`;
+            try {
+                switch(tab) {
+                    case 'all': await fetchWebResults(query); break;
+                    case 'images': await fetchPexels(query, 'photos'); break;
+                    case 'videos': await fetchPexels(query, 'videos'); break;
+                    case 'news': await fetchNews(query); break;
+                    case 'ai': await fetchAIResponse(query); break;
+                }
+            } catch (error) {
+                console.error(`Error fetching ${tab}:`, error);
+                statsLine.textContent = `Failed to load ${tab} results.`;
+                const errorContainer = resultContainers[tab] || resultContainers.all;
+                errorContainer.innerHTML = `<p style="color: red; font-weight: bold;">An error occurred: ${error.message}</p><p>Please check if your API keys are correct or see the browser console (F12) for details.</p>`;
+                errorContainer.classList.remove('hidden');
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
+        
+        // --- 5. API & RENDER FUNCTIONS ---
+        async function fetchWebResults(query) {
+            const proxyUrl = 'https://api.allorigins.win/get?url=';
+            const apiUrl = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json`;
+            const response = await fetch(proxyUrl + encodeURIComponent(apiUrl));
+            const data = await response.json();
+            const results = JSON.parse(data.contents);
+            const container = resultContainers.all;
+            container.innerHTML = '';
+            statsLine.textContent = `About ${results.RelatedTopics.length} results found`;
+            if (results.RelatedTopics.length === 0) { container.innerHTML = `<p>No web results found for "${query}".</p>`; }
+            results.RelatedTopics.forEach(item => {
+                if (item.Result) {
+                    const url = new URL(item.FirstURL);
+                    container.innerHTML += `<article class="search-result"><a href="${item.FirstURL}" target="_blank" rel="noopener noreferrer"><h3>${item.Text}</h3></a><cite>${url.hostname}</cite><p>${item.Result.replace(/<[^>]*>/g, '')}</p></article>`;
+                }
+            });
+            container.classList.remove('hidden');
+        }
+
+        async function fetchPexels(query, type) {
+            if (!PEXELS_API_KEY || PEXELS_API_KEY.includes('REPLACE')) throw new Error('Pexels API Key is not configured.');
+            const url = type === 'photos' ? `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=40` : `https://api.pexels.com/videos/search?query=${encodeURIComponent(query)}&per_page=40`;
+            const response = await fetch(url, { headers: { Authorization: PEXELS_API_KEY } });
+            if (!response.ok) throw new Error(`Pexels API request failed: ${response.statusText}`);
+            const data = await response.json();
+            const container = type === 'photos' ? resultContainers.images : resultContainers.videos;
+            container.innerHTML = '';
+            statsLine.textContent = `${data.total_results} related ${type === 'photos' ? 'images' : 'videos'} found`;
+            const items = type === 'photos' ? data.photos : data.videos;
+            if (items.length === 0) { container.innerHTML = `<p>No related ${type === 'photos' ? 'images' : 'videos'} found for "${query}".</p>`; }
+            items.forEach(item => {
+                const mediaUrl = type === 'photos' ? item.src.large2x : item.video_files[0].link;
+                const imageUrl = type === 'photos' ? item.src.medium : item.image;
+                container.innerHTML += `<a href="${mediaUrl}" target="_blank" rel="noopener noreferrer" class="image-item"><img src="${imageUrl}" alt="${item.alt || query}" loading="lazy"><div class="photographer-info">${item.photographer || 'Pexels Video'}</div></a>`;
+            });
+            container.classList.remove('hidden');
+        }
+
+        async function fetchNews(query) {
+            if (!GNEWS_API_KEY || GNEWS_API_KEY.includes('REPLACE')) throw new Error('GNews API Key is not configured.');
+            const proxyUrl = 'https://api.allorigins.win/get?url=';
+            const apiUrl = `https://gnews.io/api/v4/search?q=${encodeURIComponent(query)}&lang=en&country=us&apikey=${GNEWS_API_KEY}`;
+            const response = await fetch(proxyUrl + encodeURIComponent(apiUrl));
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            const results = JSON.parse(data.contents);
+            if (results.errors) throw new Error(results.errors[0]);
+            const container = resultContainers.news;
+            container.innerHTML = '';
+            statsLine.textContent = `${results.totalArticles} news articles found`;
+            if (results.articles.length === 0) { container.innerHTML = `<p>No news found for "${query}".</p>`; }
+            results.articles.forEach(article => {
+                container.innerHTML += `<article class="news-article">${article.image ? `<img src="${article.image}" alt="${article.title}" loading="lazy">` : ''}<div class="news-content"><a href="${article.url}" target="_blank" rel="noopener noreferrer"><h3>${article.title}</h3></a><div class="news-meta"><strong>${article.source.name}</strong> - ${new Date(article.publishedAt).toLocaleString('en-US')}</div><p class="news-description">${article.description}</p></div></article>`;
+            });
+            container.classList.remove('hidden');
+        }
+        
+        async function fetchAIResponse(query) {
+            const container = resultContainers.ai;
+            const contentDiv = container.querySelector('.ai-content');
+            contentDiv.innerHTML = '';
+            loader.innerHTML = `Nexus AI is thinking...`;
+            container.classList.remove('hidden');
+            statsLine.textContent = 'Generating AI Overview...';
+            const response = await fetch('/api/get-ai-response', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: query }) });
+            if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.error || 'Failed to get response from AI service'); }
+            const data = await response.json();
+            contentDiv.innerHTML = marked.parse(data.message);
+            statsLine.textContent = 'AI Overview Generated';
+        }
+
+        // --- 6. UI UTILITY FUNCTIONS ---
+        function hideAllContainers() { for (const key in resultContainers) { resultContainers[key].classList.add('hidden'); } }
+        function updateActiveTab(tab) { document.querySelectorAll('#tabs a').forEach(a => a.classList.remove('active')); document.querySelector(`#tabs a[data-tab="${tab}"]`).classList.add('active'); }
+    </script>
+</body>
+</html>
